@@ -10,6 +10,20 @@ function Event:__init(event_id, parent)
 	self.bind_id_count = 0
 	self.bind_count = 0
 	self.event_func_list = {}
+	--扩展
+	self.curFunc = nil
+	self.curPars = nil
+	self.curFlag = 1
+	self.realDispatchEvent = function()
+		if self.curFlag == 1 then
+			self.curFunc(unpack(self.arg_table))
+		else self.curFlag == 2 then
+			self.curFunc(self.curPars,unpack(self.arg_table))
+		end
+	end
+	self.errorFunc = function()
+		self.event_func_list[self.curFunc][self.curPars] = nil
+	end
 end
 
 function Event:GetEventID()
